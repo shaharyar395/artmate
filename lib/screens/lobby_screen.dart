@@ -207,8 +207,6 @@ class _LobbyScreenState extends State<LobbyScreen>
                     },
                   ),
                   const SizedBox(height: 18),
-                  const AdNative(),
-                  const SizedBox(height: 18),
                   _ModeBanner(
                     asset: 'banner_trace_art.png',
                     title: 'TRACE\nART',
@@ -237,7 +235,6 @@ class _LobbyScreenState extends State<LobbyScreen>
                 ],
               ),
             ),
-            const AdBanner(),
           ],
         ),
       ),

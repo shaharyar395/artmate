@@ -368,6 +368,7 @@ class OnboardingScaffold extends StatelessWidget {
 /// Fade + slight upward slide page route (matches the app's transitions).
 Route<T> fadeRoute<T>(Widget page) {
   return PageRouteBuilder<T>(
+    settings: RouteSettings(name: page.runtimeType.toString()),
     transitionDuration: const Duration(milliseconds: 350),
     reverseTransitionDuration: const Duration(milliseconds: 250),
     pageBuilder: (_, __, ___) => page,
@@ -388,6 +389,7 @@ Route<T> fadeRoute<T>(Widget page) {
 /// Slide in from the right (used when opening a game mode from the lobby).
 Route<T> slideRoute<T>(Widget page) {
   return PageRouteBuilder<T>(
+    settings: RouteSettings(name: page.runtimeType.toString()),
     transitionDuration: const Duration(milliseconds: 350),
     reverseTransitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (_, __, ___) => page,

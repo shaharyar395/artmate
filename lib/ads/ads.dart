@@ -18,6 +18,9 @@ class Ads {
 
   static bool get allowed => !isPremium();
 
+  /// Height of the bottom ad, so screens leave room for it.
+  static final ValueNotifier<double> pageAdHeight = ValueNotifier(0);
+
   static Future<void> init() async {
     try {
       await MobileAds.instance.initialize();
@@ -247,5 +250,137 @@ class _AdNativeState extends State<AdNative> {
     final ad = _ad;
     if (!_loaded || ad == null) return const SizedBox.shrink();
     return SizedBox(height: 120, child: AdWidget(ad: ad));
+  }
+}
+
+/// Tracks the visible route so the bottom ad can reload on every page.
+class AdRoutes extends NavigatorObserver {
+  static final ValueNotifier<String> page = ValueNotifier('/');
+
+  void _set(Route<dynamic>? route) {
+    page.value = route?.settings.name ?? '/';
+  }
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) =>
+      _set(route);
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) =>
+      _set(newRoute);
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) =>
+      _set(previousRoute);
+}
+
+/// Bottom ad used on every screen after the splash, matching the reference
+/// app: "Ad Loading..." until the ad arrives, then a medium native ad with a
+/// chevron that closes it on this page.
+class CollapsiblePageAd extends StatefulWidget {
+  const CollapsiblePageAd({super.key});
+
+  static const double loadingHeight = 36;
+  static const double loadedHeight = 280;
+
+  @override
+  State<CollapsiblePageAd> createState() => _CollapsiblePageAdState();
+}
+
+class _CollapsiblePageAdState extends State<CollapsiblePageAd> {
+  NativeAd? _ad;
+  bool _loaded = false;
+  bool _closed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!Ads.allowed) {
+      _publish(0);
+      return;
+    }
+    _publish(CollapsiblePageAd.loadingHeight);
+    final ad = NativeAd(
+      adUnitId: AppConfig.nativeAdUnitId,
+      request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.medium,
+      ),
+      listener: NativeAdListener(
+        onAdLoaded: (_) {
+          if (!mounted || _closed) return;
+          setState(() => _loaded = true);
+          _publish(CollapsiblePageAd.loadedHeight);
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          debugPrint('Page ad failed: $error');
+        },
+      ),
+    );
+    _ad = ad;
+    ad.load();
+  }
+
+  void _publish(double height) {
+    if (Ads.pageAdHeight.value != height) Ads.pageAdHeight.value = height;
+  }
+
+  void _close() {
+    setState(() => _closed = true);
+    _publish(0);
+    _ad?.dispose();
+    _ad = null;
+  }
+
+  @override
+  void dispose() {
+    _ad?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!Ads.allowed || _closed) return const SizedBox.shrink();
+    if (!_loaded || _ad == null) {
+      return Container(
+        height: CollapsiblePageAd.loadingHeight,
+        color: const Color(0xFFE6E6E6),
+        alignment: Alignment.center,
+        child: Text(
+          'Ad Loading...',
+          style: const TextStyle(
+            color: Color(0xFF8A8A8A),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }
+    return SizedBox(
+      height: CollapsiblePageAd.loadedHeight,
+      child: Stack(
+        children: [
+          Positioned.fill(child: AdWidget(ad: _ad!)),
+          Positioned(
+            top: 6,
+            right: 8,
+            child: Material(
+              color: const Color(0xCC222222),
+              shape: const CircleBorder(),
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: _close,
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(Icons.keyboard_arrow_down,
+                      color: Colors.white, size: 22),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

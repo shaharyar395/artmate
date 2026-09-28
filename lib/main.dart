@@ -56,6 +56,41 @@ class DrawApp extends StatelessWidget {
       title: AppConfig.appName,
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
+      navigatorObservers: [AdRoutes()],
+      builder: (context, child) {
+        return ValueListenableBuilder<String>(
+          valueListenable: AdRoutes.page,
+          builder: (context, page, _) {
+            final showAd = page != '/' && page != 'SplashScreen';
+            return ValueListenableBuilder<double>(
+              valueListenable: Ads.pageAdHeight,
+              builder: (context, adHeight, _) {
+                final media = MediaQuery.of(context);
+                final extra = showAd ? adHeight : 0.0;
+                return MediaQuery(
+                  data: media.copyWith(
+                    padding: media.padding.copyWith(
+                      bottom: media.padding.bottom + extra,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      child ?? const SizedBox.shrink(),
+                      if (showAd)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: media.viewPadding.bottom,
+                          child: CollapsiblePageAd(key: ValueKey(page)),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
       home: const SplashScreen(),
     );
   }

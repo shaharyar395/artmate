@@ -213,6 +213,7 @@ const Map<String, Map<String, String>> _t = {
     'privacy': 'Privacy',
     'terms': 'Terms',
     'watchAd': 'Watch ad',
+    'adLoading': 'Ad Loading...',
     'restorePurchase': 'Restore Purchase',
     'nothingToRestore': 'There is nothing to restore.',
     'restoreSuccess': 'Your Premium has been restored!',
