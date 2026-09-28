@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
+import 'ads/ads.dart';
 import 'battle/battle_service.dart';
 import 'premium/premium_service.dart';
 
@@ -24,6 +25,8 @@ Future<void> main() async {
   state.startTracking();
   // Store subscriptions (Premium). Safe if billing isn't available.
   PremiumService.instance.init(state);
+  Ads.isPremium = () => state.isPremium;
+  Ads.init();
   // Background music + sound effects (follows the Music / Sound Fx settings).
   Sound.instance.init(music: state.music, sfx: state.soundFx);
 

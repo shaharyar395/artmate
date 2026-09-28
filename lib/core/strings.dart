@@ -212,6 +212,7 @@ const Map<String, Map<String, String>> _t = {
     'subDisclaimer': 'Payment will start after the free trial period ends. Cancel your subscription before the end of the trial to avoid being charged. The subscription will automatically renew until you cancel it.',
     'privacy': 'Privacy',
     'terms': 'Terms',
+    'watchAd': 'Watch ad',
     'restorePurchase': 'Restore Purchase',
     'nothingToRestore': 'There is nothing to restore.',
     'restoreSuccess': 'Your Premium has been restored!',

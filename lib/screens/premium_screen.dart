@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../ads/ads.dart';
 import '../core/app_config.dart';
 import '../core/app_state.dart';
 import '../core/strings.dart';
@@ -315,6 +316,13 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         weight: FontWeight.w500,
                         color: const Color(0xFFA0A0A0))),
               ),
+              if (!app.isPremium)
+                Center(
+                  child: _link(tr(context, 'watchAd'), () {
+                    app.tap();
+                    Ads.showRewarded();
+                  }),
+                ),
               // ------------------------------ links
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),

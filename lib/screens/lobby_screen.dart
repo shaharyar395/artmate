@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../ads/ads.dart';
 import '../core/app_state.dart';
 import '../core/catalog.dart';
 import '../core/sound.dart';
@@ -33,7 +34,10 @@ class _LobbyScreenState extends State<LobbyScreen>
     super.initState();
     // Background music begins when the Lobby shows.
     Sound.instance.startMusic();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _askNotifications());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _askNotifications();
+      Ads.showAppOpen();
+    });
   }
 
   Future<void> _askNotifications() async {
@@ -196,9 +200,14 @@ class _LobbyScreenState extends State<LobbyScreen>
                     live: true,
                     showDrawNow: true,
                     art: const _EmojiCluster(['🐈‍⬛', '🐱', '✏️']),
-                    onTap: () => Navigator.of(context)
-                        .push(slideRoute(const DrawTogetherScreen())),
+                    onTap: () async {
+                      await Navigator.of(context)
+                          .push(slideRoute(const DrawTogetherScreen()));
+                      if (context.mounted) Ads.showInterstitial();
+                    },
                   ),
+                  const SizedBox(height: 18),
+                  const AdNative(),
                   const SizedBox(height: 18),
                   _ModeBanner(
                     asset: 'banner_trace_art.png',
@@ -206,8 +215,11 @@ class _LobbyScreenState extends State<LobbyScreen>
                     colors: const [Color(0xFF63D3FF), Color(0xFFA6ECFF)],
                     border: const Color(0xFF9FDFFF),
                     art: const _EmojiCluster(['🌿', '🐶', '✏️']),
-                    onTap: () => Navigator.of(context)
-                        .push(slideRoute(const TraceArtScreen())),
+                    onTap: () async {
+                      await Navigator.of(context)
+                          .push(slideRoute(const TraceArtScreen()));
+                      if (context.mounted) Ads.showInterstitial();
+                    },
                   ),
                   const SizedBox(height: 18),
                   _ModeBanner(
@@ -216,12 +228,16 @@ class _LobbyScreenState extends State<LobbyScreen>
                     colors: const [Color(0xFFC6F78F), Color(0xFFA5EE68)],
                     border: const Color(0xFF7FDD5E),
                     art: const _BattleArt(),
-                    onTap: () => Navigator.of(context)
-                        .push(slideRoute(const SelectRoomScreen())),
+                    onTap: () async {
+                      await Navigator.of(context)
+                          .push(slideRoute(const SelectRoomScreen()));
+                      if (context.mounted) Ads.showInterstitial();
+                    },
                   ),
                 ],
               ),
             ),
+            const AdBanner(),
           ],
         ),
       ),

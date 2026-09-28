@@ -25,8 +25,23 @@ class AppConfig {
   static const String marketUrl = 'market://details?id=$androidPackage';
 
   static const String feedbackEmail = 'occessstudio599@gmail.com';
-  static const String privacyPolicyUrl = 'https://example.com/privacy-policy';
-  static const String termsUrl = 'https://example.com/terms-of-use';
+  static const String privacyPolicyUrl =
+      'https://sites.google.com/view/mob-apps-inc/privacy-policy';
+  /// The sheet only lists a privacy policy, so Terms opens that same page.
+  static const String termsUrl = privacyPolicyUrl;
+
+  /// AdMob (Android), from the Photo Sketch integration sheet.
+  static const String admobAppId = 'ca-app-pub-9297250663056879~2541710847';
+  static const String interstitialAdUnitId =
+      'ca-app-pub-9297250663056879/8070203844';
+  static const String bannerAdUnitId =
+      'ca-app-pub-9297250663056879/2655983228';
+  static const String rewardedAdUnitId =
+      'ca-app-pub-9297250663056879/6483547591';
+  static const String appOpenAdUnitId =
+      'ca-app-pub-9297250663056879/3637892402';
+  static const String nativeAdUnitId =
+      'ca-app-pub-9297250663056879/2324810737';
 
   /// Premium subscription product IDs — create these in Google Play Console
   /// (Monetize > Subscriptions) with exactly these IDs.
@@ -53,7 +68,7 @@ class AppConfig {
 
   /// Shown at the bottom of Settings, so you can check that every test
   /// phone runs the same build. Change it whenever you ship a new build.
-  static const String buildTag = '1.0.0 · build 2026-09-28e';
+  static const String buildTag = '1.0.0 · build 2026-09-28f';
 
   /// How long the splash loading bar runs.
   static const Duration splashDuration = Duration(milliseconds: 2800);

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../ads/ads.dart';
 import 'sound.dart';
 
 /// Global, persisted app state. Accessed through [AppScope.of].
@@ -113,6 +114,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       _startTimer();
       Sound.instance.onForeground();
+      Ads.showAppOpen();
     } else {
       if (state == AppLifecycleState.paused ||
           state == AppLifecycleState.hidden ||
