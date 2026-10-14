@@ -100,7 +100,7 @@ class AppConfig {
 
   /// Shown at the bottom of Settings, so you can check that every test
   /// phone runs the same build. Change it whenever you ship a new build.
-  static const String buildTag = '1.0.0 · build 2026-09-28g';
+  static const String buildTag = '1.0.0 · build 2026-10-14b';
 
   /// How long the splash loading bar runs.
   static const Duration splashDuration = Duration(milliseconds: 2800);
